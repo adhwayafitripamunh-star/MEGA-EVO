@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Evolusi Pokémon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #3db8af;
+            transform: translateY(-3px);
+        }
+        
+        .filter-btn.active {
+            background-color: #ff6b6b;
+        }
+        
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .pokemon-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .pokemon-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pokemon-image {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+        }
+        
+        .pokemon-image img {
+            max-width: 80%;
+            max-height: 80%;
+            transition: transform 0.5s ease;
+        }
+        
+        .pokemon-card:hover .pokemon-image img {
+            transform: scale(1.1);
+        }
+        
+        .pokemon-info {
+            padding: 20px;
+        }
+        
+        .pokemon-name {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .pokemon-name h3 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stat-name {
+            color: #666;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+        
+        .mega-stone {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #4ecdc4;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .pokemon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .pokemon-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Mega Evolusi Pokémon</h1>
+            <p class="subtitle">Temukan informasi lengkap tentang Pokémon yang dapat mengalami Mega Evolusi, termasuk statistik, tipe, dan batu Mega yang dibutuhkan.</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="intro">
+            <p>Mega Evolusi adalah transformasi sementara yang dialami oleh Pokémon tertentu selama pertempuran. Berbeda dengan evolusi biasa, Mega Evolusi hanya berlangsung selama pertempuran dan Pokémon akan kembali ke bentuk semula setelah pertempuran berakhir.</p>
+            <p>Untuk melakukan Mega Evolusi, seorang Pelatih harus memiliki Pokémon yang memegang item Mega Stone yang sesuai dan Pelatih sendiri memegang Key Stone.</p>
+        </section>
+        
+        <div class="filter-controls">
+            <button class="filter-btn active" data-type="all">Semua Pokémon</button>
+            <button class="filter-btn" data-type="fire">Api</button>
+            <button class="filter-btn" data-type="water">Air</button>
+            <button class="filter-btn" data-type="grass">Rumput</button>
+            <button class="filter-btn" data-type="psychic">Psikis</button>
+            <button class="filter-btn" data-type="dragon">Naga</button>
+        </div>
+        
+        <div class="pokemon-grid" id="pokemonContainer">
+            <!-- Kartu Pokémon akan diisi dengan JavaScript -->
+        </div>
+        
+        <footer>
+            <p>© 2023 Mega Evolusi Pokémon. Semua hak cipta Pokémon adalah milik The Pokémon Company.</p>
+            <p>Data untuk keperluan edukasi dan demonstrasi.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data Mega Evolusi Pokémon
+        const megaPokemons = [
+            {
+                id: 1,
+                name: "Charizard",
+                megaName: "Mega Charizard X",
+                type: ["Fire", "Dragon"],
+                megaStone: "Charizardite X",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png",
+                hp: 78,
+                attack: 130,
+                defense: 111,
+                speed: 100,
+                description: "Charizard Mega Evolusi menjadi tipe Api/Naga dengan kemampuan Tough Claws."
+            },
+            {
+                id: 2,
+                name: "Charizard",
+                megaName: "Mega Charizard Y",
+                type: ["Fire", "Flying"],
+                megaStone: "Charizardite Y",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png",
+                hp: 78,
+                attack: 104,
+                defense: 78,
+                speed: 100,
+                description: "Charizard Mega Evolusi menjadi tipe Api/terbang dengan kemampuan Drought."
+            },
+            {
+                id: 3,
+                name: "Mewtwo",
+                megaName: "Mega Mewtwo X",
+                type: ["Psychic", "Fighting"],
+                megaStone: "Mewtwonite X",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10043.png",
+                hp: 106,
+                attack: 190,
+                defense: 100,
+                speed: 130,
+                description: "Mewtwo Mega Evolusi menjadi tipe Psikis/Pertarungan dengan kemampuan Steadfast."
+            },
+            {
+                id: 4,
+                name: "Mewtwo",
+                megaName: "Mega Mewtwo Y",
+                type: ["Psychic"],
+                megaStone: "Mewtwonite Y",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10044.png",
+                hp: 106,
+                attack: 150,
+                defense: 70,
+                speed: 140,
+                description: "Mewtwo Mega Evolusi menjadi tipe Psikis dengan kemampuan Insomnia."
+            },
+            {
+                id: 5,
+                name: "Blastoise",
+                megaName: "Mega Blastoise",
+                type: ["Water"],
+                megaStone: "Blastoisinite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10036.png",
+                hp: 79,
+                attack: 103,
+                defense: 120,
+                speed: 78,
+                description: "Blastoise Mega Evolusi dengan meriam besar di punggungnya dan kemampuan Mega Launcher."
+            },
+            {
+                id: 6,
+                name: "Venusaur",
+                megaName: "Mega Venusaur",
+                type: ["Grass", "Poison"],
+                megaStone: "Venusaurite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10033.png",
+                hp: 80,
+                attack: 100,
+                defense: 123,
+                speed: 80,
+                description: "Venusaur Mega Evolusi dengan bunga besar di punggungnya dan kemampuan Thick Fat."
+            },
+            {
+                id: 7,
+                name: "Gyarados",
+                megaName: "Mega Gyarados",
+                type: ["Water", "Dark"],
+                megaStone: "Gyaradosite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10041.png",
+                hp: 95,
+                attack: 155,
+                defense: 109,
+                speed: 81,
+                description: "Gyarados Mega Evolusi menjadi tipe Air/Gelap dengan kemampuan Mold Breaker."
+            },
+            {
+                id: 8,
+                name: "Lucario",
+                megaName: "Mega Lucario",
+                type: ["Fighting", "Steel"],
+                megaStone: "Lucarionite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10059.png",
+                hp: 70,
+                attack: 145,
+                defense: 88,
+                speed: 112,
+                description: "Lucario Mega Evolusi menjadi lebih kuat dengan kemampuan Adaptability."
+            },
+            {
+                id: 9,
+                name: "Gengar",
+                megaName: "Mega Gengar",
+                type: ["Ghost", "Poison"],
+                megaStone: "Gengarite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10042.png",
+                hp: 60,
+                attack: 65,
+                defense: 80,
+                speed: 130,
+                description: "Gengar Mega Evolusi dengan kemampuan Shadow Tag yang mencegah Pokémon lawan kabur."
+            },
+            {
+                id: 10,
+                name: "Salamence",
+                megaName: "Mega Salamence",
+                type: ["Dragon", "Flying"],
+                megaStone: "Salamencite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10089.png",
+                hp: 95,
+                attack: 145,
+                defense: 130,
+                speed: 120,
+                description: "Salamence Mega Evolusi dengan tubuh yang lebih aerodinamis dan kemampuan Aerilate."
+            },
+            {
+                id: 11,
+                name: "Blaziken",
+                megaName: "Mega Blaziken",
+                type: ["Fire", "Fighting"],
+                megaStone: "Blazikenite",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10050.png",
+                hp: 80,
+                attack: 160,
+                defense: 80,
+                speed: 100,
+                description: "Blaziken Mega Evolusi dengan kemampuan Speed Boost yang meningkatkan kecepatannya setiap giliran."
+            },
+            {
+                id: 12,
+                name: "Rayquaza",
+                megaName: "Mega Rayquaza",
+                type: ["Dragon", "Flying"],
+                megaStone: "Tidak perlu (Dragon Ascent)",
+                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10084.png",
+                hp: 105,
+                attack: 180,
+                defense: 100,
+                speed: 115,
+                description: "Rayquaza dapat Mega Evolusi tanpa batu Mega dengan menggunakan move Dragon Ascent."
+            }
+        ];
+
+        // Warna untuk setiap tipe Pokémon
+        const typeColors = {
+            "Fire": "#FF6B6B",
+            "Water": "#4ECDC4",
+            "Grass": "#9BC53D",
+            "Psychic": "#FF99C8",
+            "Fighting": "#C75000",
+            "Dragon": "#6A67CE",
+            "Flying": "#A8DADC",
+            "Poison": "#9D4EDD",
+            "Dark": "#5A5560",
+            "Steel": "#C0C0C0",
+            "Ghost": "#7B2CBF",
+            "Electric": "#FFD166"
+        };
+
+        // Fungsi untuk membuat kartu Pokémon
+        function createPokemonCard(pokemon) {
+            return `
+                <div class="pokemon-card" data-type="${pokemon.type.map(t => t.toLowerCase()).join(' ')}">
+                    <div class="pokemon-image">
+                        <img src="${pokemon.image}" alt="${pokemon.megaName}" onerror="this.src='https://via.placeholder.com/300x300/CCCCCC/333333?text=POKEMON'">
+                    </div>
+                    <div class="pokemon-info">
+                        <div class="pokemon-name">
+                            <h3>${pokemon.megaName}</h3>
+                            <div>
+                                ${pokemon.type.map(t => `<span class="type-badge" style="background-color: ${typeColors[t] || '#777'}">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <p><strong>Bentuk Asli:</strong> ${pokemon.name}</p>
+                        <p>${pokemon.description}</p>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-name">HP</span>
+                                <span class="stat-value">${pokemon.hp}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-name">Attack</span>
+                                <span class="stat-value">${pokemon.attack}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-name">Defense</span>
+                                <span class="stat-value">${pokemon.defense}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-name">Speed</span>
+                                <span class="stat-value">${pokemon.speed}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mega-stone">
+                            <strong>Batu Mega:</strong> ${pokemon.megaStone}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fungsi untuk menampilkan semua Pokémon
+        function displayAllPokemons() {
+            const container = document.getElementById('pokemonContainer');
+            container.innerHTML = '';
+            
+            megaPokemons.forEach(pokemon => {
+                container.innerHTML += createPokemonCard(pokemon);
+            });
+        }
+
+        // Fungsi untuk filter berdasarkan tipe
+        function filterByType(type) {
+            const container = document.getElementById('pokemonContainer');
+            container.innerHTML = '';
+            
+            if (type === 'all') {
+                displayAllPokemons();
+                return;
+            }
+            
+            const filteredPokemons = megaPokemons.filter(pokemon => 
+                pokemon.type.some(t => t.toLowerCase() === type)
+            );
+            
+            if (filteredPokemons.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; font-size: 1.2rem;">
+                    Tidak ada Pokémon dengan tipe ${type.charAt(0).toUpperCase() + type.slice(1)}.
+                </div>`;
+                return;
+            }
+            
+            filteredPokemons.forEach(pokemon => {
+                container.innerHTML += createPokemonCard(pokemon);
+            });
+        }
+
+        // Inisialisasi halaman
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tampilkan semua Pokémon saat pertama kali load
+            displayAllPokemons();
+            
+            // Setup filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hapus class active dari semua tombol
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Tambah class active ke tombol yang diklik
+                    this.classList.add('active');
+                    
+                    // Filter Pokémon berdasarkan tipe
+                    const type = this.getAttribute('data-type');
+                    filterByType(type);
+                });
+            });
+            
+            // Fallback untuk gambar yang tidak bisa dimuat
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    e.target.src = 'https://via.placeholder.com/300x300/CCCCCC/333333?text=POKEMON';
+                }
+            }, true);
+        });
+    </script>
+</body>
+</html>
